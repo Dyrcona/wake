@@ -1,0 +1,42 @@
+ wake - a small, wake on LAN program for UNIX-like operating systems
+       Copyright © 2012 Jason J.A. Stephenson <jason@sigio.com>
+
+wake is a small program to broadcast wake on LAN magic packets over
+the local network.  (It will send them over the Internet, too, if your
+doing this from your router and outgoing firewall rules don't block
+broadcast packets.)
+
+It can easily be compiled using the included GNU Makefile.  It
+requires GNU make or any make that supports VPATH.
+
+When run, wake takes a single argument of a hostname to look up in its
+configuration file, wake.hosts.  The hostname is used as a key to look
+up the MAC address to include in the magic packet.  This MAC address
+is the MAC address of the computer to respond the wake on LAN packet.
+
+The wake.hosts file should contain 1 host entry per line.  The host
+entry is expected to be the hostname followed by the MAC address of
+the host.  The hostname and MAC address are separated by any number of
+white space characters.  There is no provision for quoting of the
+hostname, so the hostname can not contain white space characters
+itself.  The MAC address is expected to consist of 6 pairs of
+hexadecimal numbers separated by some punctuation character.  Most
+networking implementations will output the address in this format,
+separated by colons, when you query the MAC address of an existing
+interface.  Typically, you can copy and paste that value into your
+wake.hosts file.
+
+Leading and trailing white space on a line are ignored.  Thus you
+could indent your wake.hosts entries.  The pound sign (#) is treated
+as a comment character and anything that appears on a line following
+that character will be ignored.
+
+wake will search for the wake.hosts file in the following locations,
+in the following order, stopping when it finds the first one:
+
+    1. The user's home directory.
+    2. The system's /etc directory.
+    3. The current working directory.
+
+If no file named wake.hosts is found in one of these locations, wake
+will print a diagnostic message and exit.
