@@ -2,9 +2,9 @@
        Copyright © 2012 Jason J.A. Stephenson <jason@sigio.com>
 
 wake is a small program to broadcast wake on LAN magic packets over
-the local network.  (It will send them over the Internet, too, if your
-doing this from your router and outgoing firewall rules don't block
-broadcast packets.)
+the local network.  (It will send them over the Internet, too, if
+you're doing this from your router and outgoing firewall rules don't
+block broadcast packets.)
 
 It can easily be compiled using the included GNU Makefile.  It
 requires GNU make or any make that supports VPATH.
