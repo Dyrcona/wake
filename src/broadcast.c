@@ -99,18 +99,20 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 		 * Loop through the interfaces and send our broadcast on each one,
 		 * skipping the loopback interface.
 		 */
-		for (n = 0; n < ifc.ifc_len; n += sizeof(struct ifreq)) {
+		for (t = ifc.ifc_buf; t < (void *)ifc.ifc_buf + ifc.ifc_len;) {
 			/* Get the interface. */
-			ifr = ifc.ifc_req + n;
+			ifr = (struct ifreq *) t;
 			/* Make a copy of it. */
 			ifrcopy = *ifr;
+			/* get the next one */
+			t += sizeof(ifr->ifr_name) + sizeof(struct sockaddr);
 			/* Check for aliases. */
-			if ((cptr = strchr(ifrcopy.ifr_name, ':')) != NULL)
+			if ((cptr = strchr(ifr->ifr_name, ':')) != NULL)
 				*cptr = 0; /* replace colon with nul */
-			if (strncmp(lastname, ifrcopy.ifr_name, IFNAMSIZ) == 0)
+			if (strncmp(lastname, ifr->ifr_name, IFNAMSIZ) == 0)
 				continue; /* Skip if we've seen this name before. */
 			/* Store the name if not. */
-			memcpy(lastname, ifrcopy.ifr_name, IFNAMSIZ);
+			memcpy(lastname, ifr->ifr_name, IFNAMSIZ);
 			/* Get the interface flags. */
 			if (ioctl(sock_fd, SIOCGIFFLAGS, &ifrcopy) == -1) {
 				fprintf(stderr, "%s\n", strerror(errno));
