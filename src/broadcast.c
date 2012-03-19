@@ -23,8 +23,8 @@
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <net/if.h>
 #include <sys/socket.h>
+#include <net/if.h>
 #include <errno.h>
 
 /*
