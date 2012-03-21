@@ -111,7 +111,7 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 			/* Make a copy of it. */
 			ifrcopy = *ifr;
 			/* get the next one */
-			t += sizeof(ifr->ifr_name) + sizeof(struct sockaddr);
+			t += sizeof(struct ifreq);
 			/* Check for aliases. */
 			if ((cptr = strchr(ifr->ifr_name, ':')) != NULL)
 				*cptr = 0; /* replace colon with nul */
