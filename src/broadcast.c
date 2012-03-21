@@ -73,6 +73,9 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 			if (t)
 				ifc.ifc_buf = t;
 			else {
+#ifdef DEBUG
+				fprintf(stder, "Allocating buffer\n");
+#endif
 				fprintf(stderr, "%s\n", strerror(errno));
 				goto CLEAN_UP;
 			}
@@ -81,6 +84,9 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 			if (ioctl(sock_fd, SIOCGIFCONF, &ifc) == -1) {
 				/* 'Cause Solaris sets errno to EINVAL. */
 				if (errno != EINVAL || lastlen != 0) {
+#ifdef DEBUG
+					fprintf(stder, "Getting configuration");
+#endif
 					fprintf(stderr, "%s\n", strerror(errno));
 					goto CLEAN_UP;
 				}
@@ -115,6 +121,9 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 			memcpy(lastname, ifr->ifr_name, IFNAMSIZ);
 			/* Get the interface flags. */
 			if (ioctl(sock_fd, SIOCGIFFLAGS, &ifrcopy) == -1) {
+#ifdef DEBUG
+				fprintf(stderr, "Getting flags\n");
+#endif
 				fprintf(stderr, "%s\n", strerror(errno));
 				goto CLEAN_UP;
 			}
@@ -137,6 +146,9 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 					);
 				}
 			} else {
+#ifdef DEBUG
+				fprintf(stderr, "Sending broadcast\n");
+#endif
 				fprintf(stderr, "%s\n", strerror(errno));
 				goto CLEAN_UP;
 			}
