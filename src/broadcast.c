@@ -29,8 +29,7 @@
 
 /*
  * Broadcasts a UDP msg to all interfaces, except the loopback
- * interface, address and ports specified in the first two
- * arguments. Since IPv6 doesn't support broadcast, this only works
+ * interface.  Since IPv6 doesn't support broadcast, this only works
  * with IPv4.
  *
  * Returns the number of bytes broadcast or -1 on error.
