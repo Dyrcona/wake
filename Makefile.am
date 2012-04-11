@@ -15,21 +15,4 @@
 # You should have received a copy of the GNU General Public License
 # along with wake.  If not, see <http://www.gnu.org/licenses/>.
 
-ifdef DEBUG
-CFLAGS += -g
-else
-.INTERMEDIATE: list.o broadcast.o hostinfo.o wake.o
-endif
-
-VPATH = src
-
-wake: wake.o list.o hostinfo.o broadcast.o
-	$(LINK.c) $^ $(LOADLIBES) -o $@ $(LDLIBS)
-
-wake.o: list.h broadcast.h hostinfo.h wake.c
-
-list.o: list.h list.c
-
-broadcast.o: broadcast.h broadcast.c
-
-hostinfo.o: list.h hostinfo.h hostinfo.c
+SUBDIRS = src

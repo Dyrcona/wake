@@ -238,8 +238,10 @@ char *find_wake_hosts_file_path(void)
 	if (strlen(fname))
 		memset(fname, '\0', strlen(fname));
 
-	/* We made it to here, so we'll check /etc/. */
-	strcpy(fname, "/etc/");
+	/* We made it to here, so we'll check SYSCONFDIR. */
+	strcpy(fname, SYSCONFDIR);
+	if (fname[strlen(SYSCONFDIR) - 1] != '/')
+		strcat(fname, "/");
 	strcat(fname, file);
 	if (stat(fname, &sb) == 0)
 		return fname;

@@ -21,6 +21,10 @@
 
 #include "list.h"
 
+#ifndef SYSCONFDIR
+#define SYSCONFDIR "/etc"
+#endif
+
 /* Used to hold hostname/mac address pairs read from the file. */
 struct hostinfo {
 	char *name;

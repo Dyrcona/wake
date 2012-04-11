@@ -35,8 +35,16 @@ wake will search for the wake.hosts file in the following locations,
 in the following order, stopping when it finds the first one:
 
     1. The user's home directory.
-    2. The system's /etc directory.
+
+    2. The system's $sysconfdir directory as defined at configure
+    time.
+
     3. The current working directory.
 
 If no file named wake.hosts is found in one of these locations, wake
 will print a diagnostic message and exit.
+
+wake uses the GNU autotools for configuration and build.  Simply run
+./configure with the options you want.  If you don't find the
+configure script, then run autoreconf --install to create configure
+and the necessary other files.
