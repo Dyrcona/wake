@@ -73,7 +73,7 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 				ifc.ifc_buf = t;
 			else {
 #ifdef DEBUG
-				fprintf(stder, "Allocating buffer\n");
+				fprintf(stderr, "Allocating buffer\n");
 #endif
 				fprintf(stderr, "%s\n", strerror(errno));
 				goto CLEAN_UP;
@@ -84,7 +84,7 @@ broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen)
 				/* 'Cause Solaris sets errno to EINVAL. */
 				if (errno != EINVAL || lastlen != 0) {
 #ifdef DEBUG
-					fprintf(stder, "Getting configuration");
+					fprintf(stderr, "Getting configuration");
 #endif
 					fprintf(stderr, "%s\n", strerror(errno));
 					goto CLEAN_UP;
