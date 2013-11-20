@@ -17,6 +17,10 @@
 
 AM_CPPFLAGS = -DSYSCONFDIR='"$(sysconfdir)"'
 
+if DEBUG
+AM_CPPFLAGS += -DDEBUG=1
+endif
+
 bin_PROGRAMS = wake
 wake_SOURCES = broadcast.c broadcast.h hostinfo.c hostinfo.h list.c list.h \
                wake.c
