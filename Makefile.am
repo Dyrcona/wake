@@ -16,3 +16,4 @@
 # along with wake.  If not, see <http://www.gnu.org/licenses/>.
 
 SUBDIRS = src
+EXTRA_DIST = gpl-3.0.txt
