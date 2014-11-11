@@ -27,8 +27,8 @@
 
 /* Used to hold hostname/mac address pairs read from the file. */
 struct hostinfo {
-	char *name;
-	char *macaddr;
+  char *name;
+  char *macaddr;
 };
 
 char *find_wake_hosts_file_path(void);

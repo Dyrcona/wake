@@ -42,86 +42,86 @@
  */
 list_t *parse_wake_hosts_file(char *path)
 {
-	/* parse a hosts file and ready the info into a list. */
-	list_t *head = NULL;
-	struct hostinfo *curhost;
-	char inbuf[128];
-	int i, j, error = 0;
+  /* parse a hosts file and ready the info into a list. */
+  list_t *head = NULL;
+  struct hostinfo *curhost;
+  char inbuf[128];
+  int i, j, error = 0;
 
-	FILE *infile;
+  FILE *infile;
 
-	infile = fopen(path, "r");
-	if (infile) {
-		while (fgets(inbuf, 128, infile) != NULL) {
-			i = 0;
-			if (inbuf[i] == '#') continue;
-			while (!isspace(inbuf[i]))
-				i++;
-			if (i > 0) { /* Skip lines that begin with whitespace */
-				curhost = malloc(sizeof(struct hostinfo));
-				if (curhost == NULL) {
-					error = errno;
-					if (head != NULL)
-						free_wake_hosts_list(head);
-					break;
-				}
-				curhost->name = calloc(i + 1, sizeof(char));
-				if (curhost->name == NULL) {
-					error = errno;
-					if (head != NULL)
-						free_wake_hosts_list(head);
-					free(curhost);
-					break;
-				}
-				strncpy(curhost->name, inbuf, i);
-				curhost->name[i] = '\0';
-				curhost->macaddr = calloc(18, sizeof(char));
-				if (curhost->macaddr == NULL) {
-					error = errno;
-					if (head != NULL) 
-						free_wake_hosts_list(head);
-					free(curhost->name);
-					free(curhost);
-					break;
-				}
-				j = 0;
-				while (isspace(inbuf[i]))
-					i++;
-				while (!isspace(inbuf[i+j])) {
-					j++;
-					if (j == 17) break;
-				}
-				if (i < strlen(inbuf) && j > 0) {
-					strncpy(curhost->macaddr, (inbuf + i), j);
-					curhost->macaddr[j] = '\0';
-					if (head == NULL) {
-						head = initialize_list(1, (void *) curhost);
-						if (head == NULL) {
-							error = errno;
-							free(curhost->name);
-							free(curhost->macaddr);
-							free(curhost);
-							break;
-						}
-					}
-					else {
-						if (append_list_data(head, (void *) curhost) == NULL) {
-							error = errno;
-							free_wake_hosts_list(head);
-							free(curhost->name);
-							free(curhost->macaddr);
-							free(curhost);
-							break;
-						}
-					}
-				}
-			}
-		}
-		fclose(infile);
-		if (error)
-			errno = error;
-	}
-	return head;
+  infile = fopen(path, "r");
+  if (infile) {
+    while (fgets(inbuf, 128, infile) != NULL) {
+      i = 0;
+      if (inbuf[i] == '#') continue;
+      while (!isspace(inbuf[i]))
+        i++;
+      if (i > 0) { /* Skip lines that begin with whitespace */
+        curhost = malloc(sizeof(struct hostinfo));
+        if (curhost == NULL) {
+          error = errno;
+          if (head != NULL)
+            free_wake_hosts_list(head);
+          break;
+        }
+        curhost->name = calloc(i + 1, sizeof(char));
+        if (curhost->name == NULL) {
+          error = errno;
+          if (head != NULL)
+            free_wake_hosts_list(head);
+          free(curhost);
+          break;
+        }
+        strncpy(curhost->name, inbuf, i);
+        curhost->name[i] = '\0';
+        curhost->macaddr = calloc(18, sizeof(char));
+        if (curhost->macaddr == NULL) {
+          error = errno;
+          if (head != NULL)
+            free_wake_hosts_list(head);
+          free(curhost->name);
+          free(curhost);
+          break;
+        }
+        j = 0;
+        while (isspace(inbuf[i]))
+          i++;
+        while (!isspace(inbuf[i+j])) {
+          j++;
+          if (j == 17) break;
+        }
+        if (i < strlen(inbuf) && j > 0) {
+          strncpy(curhost->macaddr, (inbuf + i), j);
+          curhost->macaddr[j] = '\0';
+          if (head == NULL) {
+            head = initialize_list(1, (void *) curhost);
+            if (head == NULL) {
+              error = errno;
+              free(curhost->name);
+              free(curhost->macaddr);
+              free(curhost);
+              break;
+            }
+          }
+          else {
+            if (append_list_data(head, (void *) curhost) == NULL) {
+              error = errno;
+              free_wake_hosts_list(head);
+              free(curhost->name);
+              free(curhost->macaddr);
+              free(curhost);
+              break;
+            }
+          }
+        }
+      }
+    }
+    fclose(infile);
+    if (error)
+      errno = error;
+  }
+  return head;
 }
 
 /*
@@ -129,21 +129,21 @@ list_t *parse_wake_hosts_file(char *path)
  */
 void free_wake_hosts_list(list_t *list)
 {
-	list_t *current = rewind_list(list);
-	struct hostinfo *curhost;
-	while (current != NULL) {
-		curhost = (struct hostinfo *) current->data;
-		if (curhost != NULL) {
-			if (curhost->name != NULL)
-				free(curhost->name);
-			if (curhost->macaddr != NULL)
-				free(curhost->macaddr);
-			free(curhost);
-		}
-		current = current->next;
-	}
-	free_list(list);
-	list = NULL;
+  list_t *current = rewind_list(list);
+  struct hostinfo *curhost;
+  while (current != NULL) {
+    curhost = (struct hostinfo *) current->data;
+    if (curhost != NULL) {
+      if (curhost->name != NULL)
+        free(curhost->name);
+      if (curhost->macaddr != NULL)
+        free(curhost->macaddr);
+      free(curhost);
+    }
+    current = current->next;
+  }
+  free_list(list);
+  list = NULL;
 }
 
 /*
@@ -153,7 +153,7 @@ void free_wake_hosts_list(list_t *list)
  */
 int hostcasecmpname(struct hostinfo *a, struct hostinfo *b)
 {
-	return strcasecmp(a->name, b->name);
+  return strcasecmp(a->name, b->name);
 }
 
 /*
@@ -163,15 +163,15 @@ int hostcasecmpname(struct hostinfo *a, struct hostinfo *b)
  */
 struct hostinfo *find_host_by_name(list_t *list, char *name)
 {
-	struct hostinfo des;
-	des.name = name;
-	des.macaddr = NULL;
+  struct hostinfo des;
+  des.name = name;
+  des.macaddr = NULL;
 
-	list_t *found = search_list(list, &des,
-		(int (*)(void *, void *))hostcasecmpname);
-	if (found != NULL)
-		return (struct hostinfo *) found->data;
-	return NULL;
+  list_t *found = search_list(list, &des,
+    (int (*)(void *, void *))hostcasecmpname);
+  if (found != NULL)
+    return (struct hostinfo *) found->data;
+  return NULL;
 }
 
 /*
@@ -182,76 +182,76 @@ struct hostinfo *find_host_by_name(list_t *list, char *name)
  */
 char *find_wake_hosts_file_path(void)
 {
-	static char fname[FILENAME_MAX];
-	extern int errno;
+  static char fname[FILENAME_MAX];
+  extern int errno;
 
-	const char *file = "wake.hosts";
+  const char *file = "wake.hosts";
 
-	struct stat sb;
-	struct passwd *pwent;
-	uid_t id;
+  struct stat sb;
+  struct passwd *pwent;
+  uid_t id;
 
-	char *home;
+  char *home;
 
-	errno = 0;
+  errno = 0;
 
-	/* Nul the fname buffer each time we're called. */
-	memset(fname, '\0', FILENAME_MAX);
+  /* Nul the fname buffer each time we're called. */
+  memset(fname, '\0', FILENAME_MAX);
 
-	home = getenv("HOME");
-	if (home != NULL) {
-		if (strlen(home) < FILENAME_MAX) {
-			strncpy(fname, home, strlen(home));
-			if (fname[strlen(home) - 1] != '/')
-				strcat(fname, "/");
-			if (strlen(fname) + strlen(file) < FILENAME_MAX) {
-				strcat(fname, file);
-				if (stat(fname, &sb) == 0)
-					return fname;
-				else if (errno != ENOENT)
-					return NULL;
-			}
-		}
-	}
-	else {
-		id = getuid();
-		pwent = getpwuid(id);
-		if (pwent != NULL) {
-			home = pwent->pw_dir;
-			if (home != NULL) {
-				if (strlen(home) < FILENAME_MAX) {
-					strncpy(fname, home, strlen(home));
-					if (fname[strlen(home) - 1] != '/')
-						strcat(fname, "/");
-					if (strlen(fname) + strlen(file) < FILENAME_MAX) {
-						strcat(fname, file);
-						if (stat(fname, &sb) == 0)
-							return fname;
-						else if (errno != ENOENT)
-							return NULL;
-					}
-				}
-			}
-		}
-	}
+  home = getenv("HOME");
+  if (home != NULL) {
+    if (strlen(home) < FILENAME_MAX) {
+      strncpy(fname, home, strlen(home));
+      if (fname[strlen(home) - 1] != '/')
+        strcat(fname, "/");
+      if (strlen(fname) + strlen(file) < FILENAME_MAX) {
+        strcat(fname, file);
+        if (stat(fname, &sb) == 0)
+          return fname;
+        else if (errno != ENOENT)
+          return NULL;
+      }
+    }
+  }
+  else {
+    id = getuid();
+    pwent = getpwuid(id);
+    if (pwent != NULL) {
+      home = pwent->pw_dir;
+      if (home != NULL) {
+        if (strlen(home) < FILENAME_MAX) {
+          strncpy(fname, home, strlen(home));
+          if (fname[strlen(home) - 1] != '/')
+            strcat(fname, "/");
+          if (strlen(fname) + strlen(file) < FILENAME_MAX) {
+            strcat(fname, file);
+            if (stat(fname, &sb) == 0)
+              return fname;
+            else if (errno != ENOENT)
+              return NULL;
+          }
+        }
+      }
+    }
+  }
 
-	if (strlen(fname))
-		memset(fname, '\0', strlen(fname));
+  if (strlen(fname))
+    memset(fname, '\0', strlen(fname));
 
-	/* We made it to here, so we'll check SYSCONFDIR. */
-	strcpy(fname, SYSCONFDIR);
-	if (fname[strlen(SYSCONFDIR) - 1] != '/')
-		strcat(fname, "/");
-	strcat(fname, file);
-	if (stat(fname, &sb) == 0)
-		return fname;
-	else if (errno != ENOENT && errno != EACCES)
-		return NULL;
+  /* We made it to here, so we'll check SYSCONFDIR. */
+  strcpy(fname, SYSCONFDIR);
+  if (fname[strlen(SYSCONFDIR) - 1] != '/')
+    strcat(fname, "/");
+  strcat(fname, file);
+  if (stat(fname, &sb) == 0)
+    return fname;
+  else if (errno != ENOENT && errno != EACCES)
+    return NULL;
 
-	/* We made it to here, so we check the current directory. */
-	strcpy(fname, file);
-	if (stat(fname, &sb) == 0)
-		return fname;
+  /* We made it to here, so we check the current directory. */
+  strcpy(fname, file);
+  if (stat(fname, &sb) == 0)
+    return fname;
 
-	return NULL;
+  return NULL;
 }

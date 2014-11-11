@@ -33,9 +33,9 @@ typedef struct doubly_linked_list_elem list_t;
  * directly or use the handy functions below to help with more common
  * tasks. */
 struct doubly_linked_list_elem {
-	void *data;
-	list_t *previous;
-	list_t *next;
+  void *data;
+  list_t *previous;
+  list_t *next;
 };
 
 /*

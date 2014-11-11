@@ -29,57 +29,57 @@
 
 int main(int argc, char *argv[])
 {
-	extern int errno;
-	char magic[102];
-	int i = 0;
+  extern int errno;
+  char magic[102];
+  int i = 0;
 
-	list_t *head;
-	struct hostinfo *curhost;
+  list_t *head;
+  struct hostinfo *curhost;
 
-	/* Some regex stuff to validate the input. */
-	regex_t regexp;
-	char *repat = "^([[:xdigit:]]{1,2}([[:punct:]]|$)){6}";
-	int reflags = REG_EXTENDED | REG_NOSUB;
+  /* Some regex stuff to validate the input. */
+  regex_t regexp;
+  char *repat = "^([[:xdigit:]]{1,2}([[:punct:]]|$)){6}";
+  int reflags = REG_EXTENDED | REG_NOSUB;
 
-	/* Look up file location. */
-	char *hostsfname = find_wake_hosts_file_path();
-	if (hostsfname == NULL) {
-		fprintf(stderr, "Can't find wake.hosts file\n");
-		exit(errno);
-	}
+  /* Look up file location. */
+  char *hostsfname = find_wake_hosts_file_path();
+  if (hostsfname == NULL) {
+    fprintf(stderr, "Can't find wake.hosts file\n");
+    exit(errno);
+  }
 
-	head  = parse_wake_hosts_file(hostsfname);
-	if (head == NULL) {
-		fprintf(stderr, "Can't parse file %s: %s\n", hostsfname,
-			strerror(errno));
-		exit(errno);
-	}
+  head  = parse_wake_hosts_file(hostsfname);
+  if (head == NULL) {
+    fprintf(stderr, "Can't parse file %s: %s\n", hostsfname,
+      strerror(errno));
+    exit(errno);
+  }
 
-	if (regcomp(&regexp, repat, reflags) == 0) {
-		for (i = 1; i < argc; i++) {
-			curhost = find_host_by_name(head, argv[i]);
-			if (curhost == NULL) {
-				fprintf(stderr, "Host not found in %s: %s\n", hostsfname,
-					argv[i]);
-				continue;
-			}
+  if (regcomp(&regexp, repat, reflags) == 0) {
+    for (i = 1; i < argc; i++) {
+      curhost = find_host_by_name(head, argv[i]);
+      if (curhost == NULL) {
+        fprintf(stderr, "Host not found in %s: %s\n", hostsfname,
+          argv[i]);
+        continue;
+      }
 
-			if (regexec(&regexp, curhost->macaddr, 0, NULL, 0) == REG_NOMATCH)
-				fprintf(stderr, "Invalid mac address (%s) for host (%s).\n",
-					curhost->macaddr, curhost->name);
-			else
-				if (build_msg(curhost->macaddr, magic) != NULL) {
-					if (broadcast_msg(9, magic, 102) == -1)
-						fprintf(stderr, "Unable to send broadcast: %s\n",
-							strerror(errno));
-				}
-				else
-					fprintf(stderr, "Failed to build magic packet for %s.\n",
-						curhost->name);
-		}
-		regfree(&regexp);
-	}
-	free_wake_hosts_list(head);
+      if (regexec(&regexp, curhost->macaddr, 0, NULL, 0) == REG_NOMATCH)
+        fprintf(stderr, "Invalid mac address (%s) for host (%s).\n",
+          curhost->macaddr, curhost->name);
+      else
+        if (build_msg(curhost->macaddr, magic) != NULL) {
+          if (broadcast_msg(9, magic, 102) == -1)
+            fprintf(stderr, "Unable to send broadcast: %s\n",
+              strerror(errno));
+        }
+        else
+          fprintf(stderr, "Failed to build magic packet for %s.\n",
+            curhost->name);
+    }
+    regfree(&regexp);
+  }
+  free_wake_hosts_list(head);
 
-	return 0;
+  return 0;
 }
