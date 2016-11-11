@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012,2016 Jason J.A. Stephenson <jason@sigio.com>
+ * Copyright © 2016 Jason J.A. Stephenson <jason@sigio.com>
  *
  * This file is part of wake.
  *
@@ -16,12 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with wake.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef BROADCAST_INCL
-#define BROADCAST_INCL 1
+#ifndef BUILD_MSG_INCL
+#define BUILD_MSG_INCL 1
 
-#include <sys/types.h>
-
-ssize_t
-broadcast_msg(const u_int16_t port, const char *msg, const size_t msglen);
+char *
+build_msg(char *macaddr, char *msgbuf);
 
 #endif

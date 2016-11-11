@@ -1,5 +1,5 @@
 /*
- * Copyright © 2012 Jason J.A. Stephenson <jason@sigio.com>
+ * Copyright © 2012,2016 Jason J.A. Stephenson <jason@sigio.com>
  *
  * This file is part of wake.
  *
@@ -19,6 +19,7 @@
 #include "hostinfo.h"
 #include "list.h"
 #include "broadcast.h"
+#include "build_msg.h"
 
 #include <sys/types.h>
 #include <regex.h>

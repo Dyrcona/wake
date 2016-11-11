@@ -1,4 +1,4 @@
-# Copyright © 2012 Jason J.A. Stephenson <jason@sigio.com>
+# Copyright © 2012,2016 Jason J.A. Stephenson <jason@sigio.com>
 #
 # This file is part of wake.
 #
@@ -22,7 +22,7 @@ AM_CPPFLAGS += -DDEBUG=1
 endif
 
 bin_PROGRAMS = wake
-wake_SOURCES = broadcast.c broadcast.h hostinfo.c hostinfo.h list.c list.h \
-               wake.c
+wake_SOURCES = broadcast.c broadcast.h build_msg.c build_msg.h	\
+               hostinfo.c hostinfo.h list.c list.h wake.c
 
 
