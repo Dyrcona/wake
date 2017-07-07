@@ -6,9 +6,6 @@ the local network.  (It will send them over the Internet, too, if
 you're doing this from your router and outgoing firewall rules don't
 block broadcast packets.)
 
-It can easily be compiled using the included GNU Makefile.  It
-requires GNU make or any make that supports VPATH.
-
 When run, wake takes a single argument of a hostname to look up in its
 configuration file, wake.hosts.  The hostname is used as a key to look
 up the MAC address to include in the magic packet.  This MAC address
